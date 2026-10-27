@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Campus announcements, events, exam updates, and placement notices."
+    >
+    <title>College Digital Notice Board</title>
+
+    <!-- Bootstrap is stored locally so the app has no runtime CDN dependency. -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+    >
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    >
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container page-container">
+        <div class="brand-mark" aria-hidden="true">CB</div>
+        <div class="brand-copy">
+          <p class="eyebrow">CAMPUS BULLETIN</p>
+          <h1>College Digital Notice Board</h1>
+          <p class="header-subtitle">
+            Important updates for your college community.
+          </p>
+        </div>
+        <div class="header-account">
+          <span class="signed-in-label">Signed in as <strong>{{ student_name }}</strong></span>
+          <form action="{{ url_for('logout') }}" method="post">
+            <button class="btn logout-button" type="submit">Log out</button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page-container main-content">
+      {% include "_flash_messages.html" %}
+      <section class="board-intro" aria-labelledby="notices-heading">
+        <div>
+          <p class="eyebrow section-eyebrow">STAY IN THE KNOW</p>
+          <h2 id="notices-heading">Latest notices</h2>
+          <p class="notice-summary">
+            {{ notices|length }} of {{ total_notices }} notices
+            {% if search_text %}
+              matching “{{ search_text }}”
+            {% else %}
+              from around campus
+            {% endif %}
+          </p>
+        </div>
+
+        <form class="search-form" action="{{ url_for('home') }}" method="get" role="search">
+          <label for="notice-search" class="visually-hidden">Search notices by title</label>
+          <input
+            id="notice-search"
+            class="form-control search-input"
+            type="search"
+            name="q"
+            value="{{ search_text }}"
+            placeholder="Search notice titles"
+            autocomplete="off"
+          >
+          <button class="btn search-button" type="submit">Search</button>
+          {% if search_text %}
+            <a class="clear-search" href="{{ url_for('home') }}">Clear</a>
+          {% endif %}
+        </form>
+      </section>
+
+      {% if notices %}
+        <section class="notice-grid" aria-label="College notices">
+          {% for notice in notices %}
+            <article class="notice-card">
+              <div class="card-topline">
+                <span class="category-badge category-{{ notice.category|lower }}">
+                  {{ notice.category }}
+                </span>
+                <time class="notice-date" datetime="{{ notice.date }}">
+                  {{ notice.date|replace("-", ".") }}
+                </time>
+              </div>
+              <h3>{{ notice.title }}</h3>
+              <p class="notice-description">{{ notice.description }}</p>
+              <div class="card-footer">
+                <span class="posted-label">COLLEGE ANNOUNCEMENT</span>
+                <span class="arrow-mark" aria-hidden="true">↗</span>
+              </div>
+            </article>
+          {% endfor %}
+        </section>
+      {% else %}
+        <section class="empty-state" aria-live="polite">
+          <div class="empty-icon" aria-hidden="true">⌕</div>
+          <h3>No matching notices</h3>
+          <p>Try a different title or clear your search to see all notices.</p>
+          <a class="btn search-button" href="{{ url_for('home') }}">View all notices</a>
+        </section>
+      {% endif %}
+
+      <footer class="page-footer">
+        <span>College Digital Notice Board</span>
+        <span>Check back for campus updates</span>
+      </footer>
+    </main>
+  </body>
+</html>

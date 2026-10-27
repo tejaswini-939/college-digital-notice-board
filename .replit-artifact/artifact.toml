@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "College Digital Notice Board"
+description = "A beginner-friendly Flask-based college notice board with sample notices, title search, responsive Bootstrap styling, and local Docker support."
+version = "1.0.0"
+id = "artifacts/college-notice-board"
+router = "path"
+
+[[services]]
+name = "web"
+paths = ["/"]
+localPort = 18779
+
+[services.development]
+run = "python app.py"
+
+[services.production.build]
+args = ["python", "-m", "pip", "install", "-r", "artifacts/college-notice-board/requirements.txt"]
+
+[services.production.run]
+args = ["gunicorn", "--bind", "0.0.0.0:18779", "app:app"]
+
+[services.production.run.env]
+PORT = "18779"
+
+[services.env]
+PORT = "18779"
+BASE_PATH = "/"

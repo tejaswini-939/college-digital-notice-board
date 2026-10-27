@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Create a student account to view college notices.">
+    <title>Student Sign Up | College Digital Notice Board</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container page-container">
+        <div class="brand-mark" aria-hidden="true">CB</div>
+        <div class="brand-copy">
+          <p class="eyebrow">CAMPUS BULLETIN</p>
+          <h1>College Digital Notice Board</h1>
+          <p class="header-subtitle">Your campus updates, in one place.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page-container auth-main">
+      <section class="auth-card" aria-labelledby="signup-heading">
+        <p class="eyebrow section-eyebrow">STUDENT ACCESS</p>
+        <h2 id="signup-heading">Create your account</h2>
+        <p class="auth-description">Sign up to view the latest college notices.</p>
+
+        {% include "_flash_messages.html" %}
+
+        <form action="{{ url_for('signup') }}" method="post">
+          <div class="auth-field">
+            <label for="full-name" class="form-label">Full name</label>
+            <input
+              id="full-name"
+              class="form-control auth-input"
+              type="text"
+              name="full_name"
+              value="{{ full_name }}"
+              autocomplete="name"
+              maxlength="120"
+              required
+            >
+          </div>
+          <div class="auth-field">
+            <label for="email" class="form-label">Email address</label>
+            <input
+              id="email"
+              class="form-control auth-input"
+              type="email"
+              name="email"
+              value="{{ email }}"
+              autocomplete="email"
+              maxlength="254"
+              required
+            >
+          </div>
+          <div class="auth-field">
+            <label for="password" class="form-label">Password</label>
+            <input
+              id="password"
+              class="form-control auth-input"
+              type="password"
+              name="password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+            <small class="field-help">Use at least 8 characters.</small>
+          </div>
+          <div class="auth-field">
+            <label for="confirm-password" class="form-label">Confirm password</label>
+            <input
+              id="confirm-password"
+              class="form-control auth-input"
+              type="password"
+              name="confirm_password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+          </div>
+          <button class="btn search-button auth-submit" type="submit">Sign up</button>
+        </form>
+
+        <p class="auth-switch">
+          Already registered?
+          <a href="{{ url_for('login') }}">Log in</a>
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
